@@ -16,8 +16,6 @@ public class CCC20s3redo2 {
 	public static void main(String [] args) throws IOException{
 			
 		BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
-		
-		
 				
 		String needle = read.readLine();
 		String haystack = read.readLine();
@@ -32,8 +30,10 @@ public class CCC20s3redo2 {
 		
 		for(int i = 0; i < needle.length(); i++) {
 			char c = needle.charAt(i);
-			charsInNeedle.add(c);
-			increment(c, freqMapNeedle);
+			int val = increment(c, freqMapNeedle);
+			if(val == 1) {
+				charsInNeedle.add(c);
+			}
 		}
 		
 		String eval = haystack.substring(0, needle.length());
@@ -62,8 +62,12 @@ public class CCC20s3redo2 {
 			String sub = haystack.substring(i, i+needle.length());
 			//adjust pos hash
 			posHaystackHash -= hashCharPos(prev, needle.length()-1);
-			posHaystackHash *= 5;
+			posHaystackHash *= 3;
 			posHaystackHash += hashCharPos(last, 0);
+			
+		//	boolean compare = compareFrequency();
+			boolean stringmatch = stringOccured.get(sub) != null 
+					&& stringOccured.get(sub);
 			
 			boolean occured = hashOccured.get(posHaystackHash) != null 
 					&& hashOccured.get(posHaystackHash)
@@ -120,7 +124,7 @@ public class CCC20s3redo2 {
 	}
 	
 	private static long hashPos(String s) {
-		int prime = 5; // prime 
+		int prime = 3; // prime 
 		long sum = 0; // keeps track 
 		for(int i = 0; i < s.length(); i++) {
 			int pos = s.length() - i - 1;
@@ -144,7 +148,7 @@ public class CCC20s3redo2 {
 	
 	private static long hashCharPos(char c, int pos) {
 		int ascii = getAscii(c); //get ascii value for char 
-		long power = (int) Math.pow(5, pos); 
+		long power = (int) Math.pow(3, pos); 
 		return ascii*power;
 	}
 	
@@ -166,7 +170,7 @@ public class CCC20s3redo2 {
 	private static boolean compareFrequency() {
 		for(char c : charsInNeedle) {
 			int ni = freqMapNeedle.get(c);
-			int hi = freqMapHaystack.get(c);
+			int hi = (freqMapHaystack.get(c) != null) ? freqMapHaystack.get(c) : 0;
 			if(ni != hi) {
 				return false;
 			}
